@@ -1,241 +1,166 @@
-// State Management
+// State
 let state = {
-    apps: JSON.parse(localStorage.getItem('nexus_v2_apps')) || [],
-    categories: JSON.parse(localStorage.getItem('nexus_v2_cats')) || ['Works', 'Google', 'AI Tools', 'Entertainment', 'Education', 'Tools']
+    apps: JSON.parse(localStorage.getItem('ykzir_apps')) || [],
+    categories: JSON.parse(localStorage.getItem('ykzir_cats')) || ['Works', 'Google', 'AI Tools'],
+    stats: JSON.parse(localStorage.getItem('ykzir_stats')) || { clicks: {}, catViews: {} },
+    currentTab: 'all'
 };
 
-const mainGrid = document.getElementById('mainGrid');
-const favGrid = document.getElementById('favoritesSection');
-const appSearch = document.getElementById('appSearch');
-const searchOverlay = document.getElementById('searchOverlay');
-
-// --- RENDER FUNCTIONS ---
+// --- INITIALIZE ---
+function init() {
+    render();
+    startTime();
+}
 
 function render() {
-    const searchTerm = appSearch.value.toLowerCase();
-    mainGrid.innerHTML = '';
-    favGrid.innerHTML = '';
-
-    // 1. Favorites (Only show if not searching)
-    if (searchTerm === '') {
-        const favorites = state.apps.filter(app => app.favorite);
-        favorites.forEach(app => favGrid.appendChild(createAppElement(app)));
-    }
-
-    // 2. Folders
+    const grid = document.getElementById('appGrid');
+    const sideCats = document.getElementById('sidebarCategories');
+    const statsView = document.getElementById('statsView');
+    grid.innerHTML = '';
+    sideCats.innerHTML = '';
+    
+    // Sidebar Categories
     state.categories.forEach(cat => {
-        const catApps = state.apps.filter(app => app.category === cat && app.name.toLowerCase().includes(searchTerm));
-        if (catApps.length > 0) {
-            mainGrid.appendChild(createFolderElement(cat, catApps));
-        }
+        const btn = document.createElement('button');
+        btn.className = `nav-item ${state.currentTab === cat ? 'active' : ''}`;
+        btn.innerHTML = `<i class="fa-solid fa-folder"></i> ${cat}`;
+        btn.onclick = () => switchTab(cat);
+        sideCats.appendChild(btn);
     });
 
-    // 3. Uncategorized
-    const uncategorized = state.apps.filter(app => 
-        (app.category === 'uncategorized' || !state.categories.includes(app.category)) &&
-        app.name.toLowerCase().includes(searchTerm)
-    );
-    uncategorized.forEach(app => mainGrid.appendChild(createAppElement(app)));
-
+    if (state.currentTab === 'stats') {
+        grid.style.display = 'none';
+        statsView.style.display = 'grid';
+        renderStats();
+    } else {
+        grid.style.display = 'grid';
+        statsView.style.display = 'none';
+        renderApps();
+    }
     save();
 }
 
-function createAppElement(app) {
-    const div = document.createElement('div');
-    div.className = 'app-item';
-    const iconUrl = `https://www.google.com/s2/favicons?domain=${app.url}&sz=128`;
+// --- APP RENDERING ---
+function renderApps() {
+    const grid = document.getElementById('appGrid');
+    let filtered = state.apps;
 
-    div.innerHTML = `
-        <div class="app-controls">
-            <button onclick="editApp('${app.id}', event)"><i class="fa-solid fa-edit"></i></button>
-            <button onclick="deleteApp('${app.id}', event)"><i class="fa-solid fa-trash"></i></button>
-        </div>
-        <div class="app-icon" style="background: ${stringToColor(app.name)}">
-            <img src="${iconUrl}" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-globe\'></i>'">
-        </div>
-        <div class="app-label">${app.name}</div>
-    `;
+    if (state.currentTab === 'fav') filtered = state.apps.filter(a => a.favorite);
+    else if (state.currentTab !== 'all') filtered = state.apps.filter(a => a.category === state.currentTab);
 
-    div.onclick = (e) => {
-        if (!e.target.closest('.app-controls')) {
-            window.open(app.url, '_blank');
-            closeSearch();
-        }
-    };
-    return div;
-}
+    filtered.forEach(app => {
+        const card = document.createElement('div');
+        card.className = 'app-card';
+        // Using high-res favicon service
+        const iconUrl = `https://unavatar.io/google/${new URL(app.url).hostname}`;
 
-function createFolderElement(title, apps) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'folder-wrapper';
-
-    wrapper.innerHTML = `
-        <div class="folder-card">
-            <div class="folder-preview">
-                <div class="mini-dot"></div><div class="mini-dot"></div>
-                <div class="mini-dot"></div><div class="mini-dot"></div>
+        card.innerHTML = `
+            <div class="app-icon-box">
+                <img src="${iconUrl}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1243/1243966.png'">
             </div>
-            <h4>${title}</h4>
-            <small style="color:var(--text-dim)">${apps.length} items</small>
-        </div>
-        <div class="folder-expanded"></div>
-    `;
-
-    const expansion = wrapper.querySelector('.folder-expanded');
-    apps.forEach(app => expansion.appendChild(createAppElement(app)));
-
-    return wrapper;
+            <div style="font-weight:600; text-align:center">${app.name}</div>
+            <div style="font-size:0.7rem; color:var(--text-muted); margin-top:5px">${app.category}</div>
+        `;
+        
+        card.onclick = () => trackClick(app);
+        grid.appendChild(card);
+    });
 }
 
-// --- CORE LOGIC ---
+// --- STATS LOGIC ---
+function trackClick(app) {
+    state.stats.clicks[app.name] = (state.stats.clicks[app.name] || 0) + 1;
+    state.stats.catViews[app.category] = (state.stats.catViews[app.category] || 0) + 1;
+    save();
+    window.open(app.url, '_blank');
+}
+
+function renderStats() {
+    const view = document.getElementById('statsView');
+    const topApp = Object.entries(state.stats.clicks).sort((a,b) => b[1]-a[1])[0] || ["None", 0];
+    const topCat = Object.entries(state.stats.catViews).sort((a,b) => b[1]-a[1])[0] || ["None", 0];
+
+    view.innerHTML = `
+        <div class="stat-card">
+            <h4>Most Used App</h4>
+            <div class="stat-val">${topApp[0]}</div>
+            <p>${topApp[1]} Clicks</p>
+        </div>
+        <div class="stat-card">
+            <h4>Favorite Category</h4>
+            <div class="stat-val">${topCat[0]}</div>
+            <p>${topCat[1]} Interactions</p>
+        </div>
+    `;
+}
+
+// --- HELPERS ---
+function switchTab(tab) {
+    state.currentTab = tab;
+    document.getElementById('currentTabTitle').innerText = tab.charAt(0).toUpperCase() + tab.slice(1);
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    render();
+}
 
 function save() {
-    localStorage.setItem('nexus_v2_apps', JSON.stringify(state.apps));
-    localStorage.setItem('nexus_v2_cats', JSON.stringify(state.categories));
+    localStorage.setItem('ykzir_apps', JSON.stringify(state.apps));
+    localStorage.setItem('ykzir_cats', JSON.stringify(state.categories));
+    localStorage.setItem('ykzir_stats', JSON.stringify(state.stats));
 }
 
-function closeModals() {
-    document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
-    document.getElementById('appForm').reset();
-    document.getElementById('editId').value = '';
-}
-
-// --- SEARCH OVERLAY LOGIC ---
-function openSearch() {
-    searchOverlay.style.display = 'flex';
-    appSearch.focus();
-}
-
-function closeSearch() {
-    searchOverlay.style.display = 'none';
-    appSearch.value = '';
-    render();
-}
-
-document.getElementById('openSearchBtn').onclick = openSearch;
-
-// Close search on ESC
-window.onkeydown = (e) => {
-    if (e.key === "Escape") closeSearch();
-    if (e.altKey && e.key === "s") openSearch();
-};
-
-// Close search on clicking outside modal
-searchOverlay.onclick = (e) => {
-    if (e.target === searchOverlay) closeSearch();
-};
-
-appSearch.oninput = render;
-
-// --- ACTIONS ---
-
-document.getElementById('addAppBtn').onclick = () => {
-    const select = document.getElementById('appCategory');
-    select.innerHTML = '<option value="uncategorized">Uncategorized</option>' + 
-        state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-    document.getElementById('appModal').style.display = 'flex';
-};
-
-document.getElementById('manageFoldersBtn').onclick = () => {
-    updateFolderListUI();
-    document.getElementById('folderModal').style.display = 'flex';
-};
-
-document.getElementById('closeFolderModal').onclick = closeModals;
-
-document.getElementById('createNewFolder').onclick = () => {
-    const name = document.getElementById('newFolderName').value.trim();
-    if(name && !state.categories.includes(name)) {
-        state.categories.push(name);
-        document.getElementById('newFolderName').value = '';
-        updateFolderListUI();
-        render();
+function showModal(id) { 
+    // Fill category select for app modal
+    if(id === 'appModal') {
+        const sel = document.getElementById('appCategory');
+        sel.innerHTML = state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
     }
-};
-
-function updateFolderListUI() {
-    const list = document.getElementById('folderList');
-    list.innerHTML = state.categories.map(c => `
-        <div class="folder-edit-item">
-            <span>${c}</span>
-            <button onclick="removeCategory('${c}')" style="background:none; border:none; color:#ff4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-        </div>
-    `).join('');
+    document.getElementById(id).style.display = 'flex'; 
 }
 
-window.removeCategory = (cat) => {
-    state.categories = state.categories.filter(c => c !== cat);
-    updateFolderListUI();
-    render();
+function closeModals() { 
+    document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); 
+}
+
+function startTime() {
+    const today = new Date();
+    document.getElementById('dateTime').innerText = today.toLocaleDateString() + ' ' + today.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    setTimeout(startTime, 1000);
+}
+
+// Export/Import
+function exportData() {
+    const data = JSON.stringify(state);
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'ykzir_backup.json';
+    a.click();
+}
+
+function importData() { document.getElementById('importFile').click(); }
+document.getElementById('importFile').onchange = (e) => {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        const imported = JSON.parse(ev.target.result);
+        state.apps = imported.apps;
+        state.categories = imported.categories;
+        render();
+    };
+    reader.readAsText(e.target.files[0]);
 };
 
+// New App Form
 document.getElementById('appForm').onsubmit = (e) => {
     e.preventDefault();
-    const id = document.getElementById('editId').value || Date.now().toString();
-    const newApp = {
-        id,
+    state.apps.push({
+        id: Date.now(),
         name: document.getElementById('appName').value,
         url: document.getElementById('appUrl').value,
         category: document.getElementById('appCategory').value,
         favorite: document.getElementById('appFavorite').checked
-    };
-
-    const idx = state.apps.findIndex(a => a.id === id);
-    if(idx > -1) state.apps[idx] = newApp;
-    else state.apps.push(newApp);
-
+    });
     closeModals();
     render();
 };
 
-window.deleteApp = (id, e) => {
-    e.stopPropagation();
-    if(confirm("Delete this shortcut?")) {
-        state.apps = state.apps.filter(a => a.id !== id);
-        render();
-    }
-};
-
-window.editApp = (id, e) => {
-    e.stopPropagation();
-    const app = state.apps.find(a => a.id === id);
-    document.getElementById('editId').value = app.id;
-    document.getElementById('appName').value = app.name;
-    document.getElementById('appUrl').value = app.url;
-    document.getElementById('appFavorite').checked = app.favorite;
-    document.getElementById('addAppBtn').click(); 
-    document.getElementById('appCategory').value = app.category;
-};
-
-// --- IMPORT/EXPORT ---
-
-document.getElementById('exportBtn').onclick = () => {
-    const data = JSON.stringify(state, null, 2);
-    const blob = new Blob([data], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `nexus_backup_${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-};
-
-document.getElementById('importBtn').onclick = () => document.getElementById('importFile').click();
-
-document.getElementById('importFile').onchange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        state = JSON.parse(event.target.result);
-        save();
-        render();
-    };
-    reader.readAsText(file);
-};
-
-function stringToColor(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    return `hsl(${Math.abs(hash) % 360}, 40%, 35%)`;
-}
-
-render();
+init();
