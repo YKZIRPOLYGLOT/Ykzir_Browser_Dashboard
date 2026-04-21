@@ -1,152 +1,26 @@
 {
   "apps": [
-    {
-      "id": "app_001",
-      "name": "ChatGPT",
-      "url": "https://chatgpt.com/",
-      "category": "AI Tools",
-      "favorite": true
-    },
-    {
-      "id": "app_002",
-      "name": "Gemini",
-      "url": "https://gemini.google.com/u/0/app",
-      "category": "Google",
-      "favorite": true
-    },
-    {
-      "id": "app_003",
-      "name": "YouTube",
-      "url": "https://www.youtube.com/",
-      "category": "Entertainment",
-      "favorite": false
-    },
-    {
-      "id": "app_004",
-      "name": "GitHub",
-      "url": "https://github.com/",
-      "category": "Works",
-      "favorite": true
-    },
-    {
-      "id": "app_005",
-      "name": "Ykzir Network",
-      "url": "https://ykzirpolyglot.github.io/ykzir_network/",
-      "category": "Works",
-      "favorite": false
-    },
-    {
-      "id": "app_006",
-      "name": "Fast.com Speedtest",
-      "url": "https://fast.com/ar",
-      "category": "Tools",
-      "favorite": false
-    },
-    {
-      "id": "app_007",
-      "name": "Wikipedia",
-      "url": "https://www.wikipedia.org/",
-      "category": "Education",
-      "favorite": false
-    },
-    {
-      "id": "app_008",
-      "name": "Lichess",
-      "url": "https://lichess.org/",
-      "category": "Entertainment",
-      "favorite": false
-    },
-    {
-      "id": "app_009",
-      "name": "LK21",
-      "url": "https://tv1.lk21official.love/",
-      "category": "Entertainment",
-      "favorite": false
-    },
-    {
-      "id": "app_010",
-      "name": "BMKG Cuaca",
-      "url": "https://cuaca.bmkg.go.id/",
-      "category": "Tools",
-      "favorite": true
-    },
-    {
-      "id": "app_011",
-      "name": "Oxford Dictionary",
-      "url": "https://www.oxfordlearnersdictionaries.com/",
-      "category": "Education",
-      "favorite": false
-    },
-    {
-      "id": "g_001",
-      "name": "Google Docs",
-      "url": "https://docs.google.com/",
-      "category": "Google",
-      "favorite": false
-    },
-    {
-      "id": "g_002",
-      "name": "Google Sheets",
-      "url": "https://sheets.google.com/",
-      "category": "Google",
-      "favorite": false
-    },
-    {
-      "id": "g_003",
-      "name": "Google Calendar",
-      "url": "https://calendar.google.com/",
-      "category": "Google",
-      "favorite": true
-    },
-    {
-      "id": "g_004",
-      "name": "Google Translate",
-      "url": "https://translate.google.com/",
-      "category": "Google",
-      "favorite": false
-    },
-    {
-      "id": "g_005",
-      "name": "Gmail",
-      "url": "https://mail.google.com/",
-      "category": "Google",
-      "favorite": true
-    },
-    {
-      "id": "g_006",
-      "name": "Google Drive",
-      "url": "https://drive.google.com/",
-      "category": "Google",
-      "favorite": true
-    },
-    {
-      "id": "g_007",
-      "name": "Google Meet",
-      "url": "https://meet.google.com/",
-      "category": "Google",
-      "favorite": false
-    },
-    {
-      "id": "g_008",
-      "name": "Google Maps",
-      "url": "https://www.google.com/maps",
-      "category": "Google",
-      "favorite": false
-    },
-    {
-      "id": "g_009",
-      "name": "Google Slides",
-      "url": "https://slides.google.com/",
-      "category": "Google",
-      "favorite": false
-    },
-    {
-      "id": "g_010",
-      "name": "Google Forms",
-      "url": "https://forms.google.com/",
-      "category": "Google",
-      "favorite": false
-    }
+    { "id": "app_001", "name": "ChatGPT", "url": "https://chatgpt.com/", "category": "AI Tools", "favorite": true },
+    { "id": "app_002", "name": "Gemini", "url": "https://gemini.google.com/u/0/app", "category": "Google", "favorite": true },
+    { "id": "app_003", "name": "YouTube", "url": "https://www.youtube.com/", "category": "Entertainment", "favorite": false },
+    { "id": "app_004", "name": "GitHub", "url": "https://github.com/", "category": "Works", "favorite": true },
+    { "id": "app_005", "name": "Ykzir Network", "url": "https://ykzirpolyglot.github.io/ykzir_network/", "category": "Works", "favorite": false },
+    { "id": "app_006", "name": "Fast.com Speedtest", "url": "https://fast.com/ar", "category": "Tools", "favorite": false },
+    { "id": "app_007", "name": "Wikipedia", "url": "https://www.wikipedia.org/", "category": "Education", "favorite": false },
+    { "id": "app_008", "name": "Lichess", "url": "https://lichess.org/", "category": "Entertainment", "favorite": false },
+    { "id": "app_009", "name": "LK21", "url": "https://tv1.lk21official.love/", "category": "Entertainment", "favorite": false },
+    { "id": "app_010", "name": "BMKG Cuaca", "url": "https://cuaca.bmkg.go.id/", "category": "Tools", "favorite": true },
+    { "id": "app_011", "name": "Oxford Dictionary", "url": "https://www.oxfordlearnersdictionaries.com/", "category": "Education", "favorite": false },
+    { "id": "g_001", "name": "Google Docs", "url": "https://docs.google.com/", "category": "Google", "favorite": false },
+    { "id": "g_002", "name": "Google Sheets", "url": "https://sheets.google.com/", "category": "Google", "favorite": false },
+    { "id": "g_003", "name": "Google Calendar", "url": "https://calendar.google.com/", "category": "Google", "favorite": true },
+    { "id": "g_004", "name": "Google Translate", "url": "https://translate.google.com/", "category": "Google", "favorite": false },
+    { "id": "g_005", "name": "Gmail", "url": "https://mail.google.com/", "category": "Google", "favorite": true },
+    { "id": "g_006", "name": "Google Drive", "url": "https://drive.google.com/", "category": "Google", "favorite": true },
+    { "id": "g_007", "name": "Google Meet", "url": "https://meet.google.com/", "category": "Google", "favorite": false },
+    { "id": "g_008", "name": "Google Maps", "url": "https://www.google.com/maps", "category": "Google", "favorite": false },
+    { "id": "g_009", "name": "Google Slides", "url": "https://slides.google.com/", "category": "Google", "favorite": false },
+    { "id": "g_010", "name": "Google Forms", "url": "https://forms.google.com/", "category": "Google", "favorite": false }
   ],
   "categories": [
     "Works",
@@ -156,5 +30,10 @@
     "Education",
     "Tools",
     "Social"
-  ]
+  ],
+  "theme": "theme-midnight",
+  "folderColor": "#7367f0",
+  "folderStyle": "classic",
+  "bgStyle": "gradient",
+  "clicks": {}
 }

@@ -12,7 +12,7 @@
 
 <div class="app-container">
     <aside class="sidebar">
-        <a href="https://ykzirpolyglot.github.io/vcard/" target="_blank" class="logo-link">
+        <a href="https://ykzirpolyglot.github.io/vcard/" target="_blank" class="logo-link" style="text-decoration: none; color: inherit;">
             <div class="logo">
                 <div class="logo-icon"></div>
                 <span>Ykzir Polyglot</span>
@@ -25,7 +25,6 @@
                 <ul>
                     <li class="active" data-view="dashboard"><i data-lucide="layout-grid"></i> Dashboard</li>
                     <li data-view="categories"><i data-lucide="layers"></i> Categories</li>
-                    <li data-view="favorites"><i data-lucide="star"></i> Favorites</li>
                 </ul>
             </div>
             <div class="menu-section">
@@ -64,11 +63,7 @@
         </div>
 
         <div id="view-categories" class="view-panel">
-            <div class="categories-grid" id="categoriesGrid"></div>
-        </div>
-
-        <div id="view-favorites" class="view-panel">
-            <div id="favoritesGrid" class="grid-layout"></div>
+            <div id="categoriesGrid" class="categories-grid"></div>
         </div>
 
         <div id="view-statistics" class="view-panel">
@@ -81,14 +76,25 @@
                 <div class="stat-card">
                     <i data-lucide="package" style="color:#28c76f"></i>
                     <h3 id="stat-totalApps">0</h3>
-                    <p>Shortcuts</p>
+                    <p>Total Shortcuts</p>
                 </div>
                 <div class="stat-card">
                     <i data-lucide="tag" style="color:#00cfe8"></i>
                     <h3 id="stat-totalCats">0</h3>
-                    <p>Categories</p>
+                    <p>Total Categories</p>
                 </div>
             </section>
+
+            <div class="stats-detail-grid">
+                <div class="card stats-list-card">
+                    <h3><i data-lucide="trending-up"></i> Top 5 Most Used</h3>
+                    <div id="top-apps-list" class="stats-list"></div>
+                </div>
+                <div class="card stats-list-card">
+                    <h3><i data-lucide="pie-chart"></i> Category Distribution</h3>
+                    <div id="cat-dist-list" class="stats-list"></div>
+                </div>
+            </div>
         </div>
 
         <div id="view-settings" class="view-panel">
@@ -107,10 +113,7 @@
                         <option value="theme-rose">Rose Quartz</option>
                     </select>
                 </div>
-                <div class="setting-group">
-                    <label>Folder Color</label>
-                    <input type="color" id="folderColorPicker" onchange="updateVisuals()">
-                </div>
+                <div class="setting-group"><label>Folder Color</label><input type="color" id="folderColorPicker" onchange="updateVisuals()"></div>
                 <div class="setting-group">
                     <label>Background Style</label>
                     <select id="bgStyleSelect" onchange="updateVisuals()">
@@ -130,7 +133,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="card settings-card danger-zone">
                 <h3 style="color: #ea5455;">Danger Zone</h3>
                 <p style="font-size: 12px; margin-bottom: 15px;">Reset all dashboard data to factory settings.</p>
@@ -160,6 +162,20 @@
         <div class="modal-btns">
             <button class="btn-text" onclick="closeModals()">Cancel</button>
             <button class="btn-primary" onclick="saveFolder()">Create</button>
+        </div>
+    </div>
+</div>
+
+<div id="editLinkModal" class="modal-overlay">
+    <div class="modal">
+        <h3>Edit Shortcut</h3>
+        <input type="hidden" id="editLinkId">
+        <input type="text" id="editLinkName" placeholder="Name">
+        <input type="text" id="editLinkUrl" placeholder="URL">
+        <select id="editLinkCatSelect"></select>
+        <div class="modal-btns">
+            <button class="btn-text" onclick="closeModals()">Cancel</button>
+            <button class="btn-primary" onclick="updateLink()">Save Changes</button>
         </div>
     </div>
 </div>
