@@ -76,6 +76,76 @@
       "url": "https://www.oxfordlearnersdictionaries.com/",
       "category": "Education",
       "favorite": false
+    },
+    {
+      "id": "g_001",
+      "name": "Google Docs",
+      "url": "https://docs.google.com/",
+      "category": "Google",
+      "favorite": false
+    },
+    {
+      "id": "g_002",
+      "name": "Google Sheets",
+      "url": "https://sheets.google.com/",
+      "category": "Google",
+      "favorite": false
+    },
+    {
+      "id": "g_003",
+      "name": "Google Calendar",
+      "url": "https://calendar.google.com/",
+      "category": "Google",
+      "favorite": true
+    },
+    {
+      "id": "g_004",
+      "name": "Google Translate",
+      "url": "https://translate.google.com/",
+      "category": "Google",
+      "favorite": false
+    },
+    {
+      "id": "g_005",
+      "name": "Gmail",
+      "url": "https://mail.google.com/",
+      "category": "Google",
+      "favorite": true
+    },
+    {
+      "id": "g_006",
+      "name": "Google Drive",
+      "url": "https://drive.google.com/",
+      "category": "Google",
+      "favorite": true
+    },
+    {
+      "id": "g_007",
+      "name": "Google Meet",
+      "url": "https://meet.google.com/",
+      "category": "Google",
+      "favorite": false
+    },
+    {
+      "id": "g_008",
+      "name": "Google Maps",
+      "url": "https://www.google.com/maps",
+      "category": "Google",
+      "favorite": false
+    },
+    {
+      "id": "g_009",
+      "name": "Google Slides",
+      "url": "https://slides.google.com/",
+      "category": "Google",
+      "favorite": false
+    },
+    {
+      "id": "g_010",
+      "name": "Google Forms",
+      "url": "https://forms.google.com/",
+      "category": "Google",
+      "favorite": false
     }
   ],
   "categories": [
