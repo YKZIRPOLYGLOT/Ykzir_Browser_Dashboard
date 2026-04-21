@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ykzir Polyglot Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="theme-midnight">
+
+<div class="app-container">
+    <aside class="sidebar">
+        <a href="https://ykzirpolyglot.github.io/vcard/" target="_blank" class="logo-link">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <span>Ykzir Polyglot</span>
+            </div>
+        </a>
+        
+        <nav id="sidebarNav">
+            <div class="menu-section">
+                <h4>Main</h4>
+                <ul>
+                    <li class="active" data-view="dashboard"><i data-lucide="layout-grid"></i> Dashboard</li>
+                    <li data-view="categories"><i data-lucide="layers"></i> Categories</li>
+                    <li data-view="favorites"><i data-lucide="star"></i> Favorites</li>
+                </ul>
+            </div>
+            <div class="menu-section">
+                <h4>Management</h4>
+                <ul>
+                    <li onclick="openModal('linkModal')"><i data-lucide="link"></i> Add Link</li>
+                    <li onclick="openModal('folderModal')"><i data-lucide="folder-plus"></i> Add Folder</li>
+                    <li id="importTrigger"><i data-lucide="upload"></i> Import JSON</li>
+                    <li onclick="exportData()"><i data-lucide="download"></i> Export JSON</li>
+                </ul>
+            </div>
+            <div class="menu-section">
+                <h4>System</h4>
+                <ul>
+                    <li data-view="statistics"><i data-lucide="bar-chart-3"></i> Statistics</li>
+                    <li data-view="settings"><i data-lucide="settings"></i> Settings</li>
+                </ul>
+            </div>
+        </nav>
+        <input type="file" id="importInput" style="display:none" accept=".json">
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <h2 id="viewTitle">Dashboard</h2>
+            <div class="search-box">
+                <i data-lucide="search"></i>
+                <input type="text" id="globalSearch" placeholder="Search apps...">
+            </div>
+            <div class="user-profile"><div class="avatar">UR</div></div>
+        </header>
+
+        <div id="view-dashboard" class="view-panel active">
+            <div id="uncategorized-container" class="grid-layout"></div>
+            <div id="folder-container" class="folder-shelf"></div>
+        </div>
+
+        <div id="view-categories" class="view-panel">
+            <div class="categories-grid" id="categoriesGrid"></div>
+        </div>
+
+        <div id="view-favorites" class="view-panel">
+            <div id="favoritesGrid" class="grid-layout"></div>
+        </div>
+
+        <div id="view-statistics" class="view-panel">
+            <section class="stats-overview">
+                <div class="stat-card">
+                    <i data-lucide="mouse-pointer-2" style="color:var(--accent)"></i>
+                    <h3 id="stat-totalClicks">0</h3>
+                    <p>Total Clicks</p>
+                </div>
+                <div class="stat-card">
+                    <i data-lucide="package" style="color:#28c76f"></i>
+                    <h3 id="stat-totalApps">0</h3>
+                    <p>Shortcuts</p>
+                </div>
+                <div class="stat-card">
+                    <i data-lucide="tag" style="color:#00cfe8"></i>
+                    <h3 id="stat-totalCats">0</h3>
+                    <p>Categories</p>
+                </div>
+            </section>
+        </div>
+
+        <div id="view-settings" class="view-panel">
+            <div class="card settings-card">
+                <h3>Visual Preferences</h3>
+                <div class="setting-group">
+                    <label>Master Theme</label>
+                    <select id="themeSelect" onchange="changeTheme(this.value)">
+                        <option value="theme-midnight">Midnight Lavender</option>
+                        <option value="theme-emerald">Emerald Forest</option>
+                        <option value="theme-ocean">Deep Ocean</option>
+                        <option value="theme-crimson">Crimson Night</option>
+                        <option value="theme-amber">Amber Sunset</option>
+                        <option value="theme-slate">Modern Slate</option>
+                        <option value="theme-cyber">Cyberpunk Neon</option>
+                        <option value="theme-rose">Rose Quartz</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>Folder Color</label>
+                    <input type="color" id="folderColorPicker" onchange="updateVisuals()">
+                </div>
+                <div class="setting-group">
+                    <label>Background Style</label>
+                    <select id="bgStyleSelect" onchange="updateVisuals()">
+                        <option value="solid">Solid</option>
+                        <option value="gradient">Gradient</option>
+                        <option value="dots">Dots</option>
+                        <option value="mesh">Mesh</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>Folder Icon</label>
+                    <select id="folderStyleSelect" onchange="updateVisuals()">
+                        <option value="classic">Classic</option>
+                        <option value="hexagon">Hexagon</option>
+                        <option value="shield">Shield</option>
+                        <option value="gem">Gem</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card settings-card danger-zone">
+                <h3 style="color: #ea5455;">Danger Zone</h3>
+                <p style="font-size: 12px; margin-bottom: 15px;">Reset all dashboard data to factory settings.</p>
+                <button class="btn-reset" onclick="resetEverything()">RESET ALL DATA</button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="linkModal" class="modal-overlay">
+    <div class="modal">
+        <h3>Add Shortcut</h3>
+        <input type="text" id="linkName" placeholder="Name">
+        <input type="text" id="linkUrl" placeholder="URL">
+        <select id="linkCatSelect"></select>
+        <div class="modal-btns">
+            <button class="btn-text" onclick="closeModals()">Cancel</button>
+            <button class="btn-primary" onclick="saveLink()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div id="folderModal" class="modal-overlay">
+    <div class="modal">
+        <h3>Add Category</h3>
+        <input type="text" id="folderName" placeholder="Category Name">
+        <div class="modal-btns">
+            <button class="btn-text" onclick="closeModals()">Cancel</button>
+            <button class="btn-primary" onclick="saveFolder()">Create</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
