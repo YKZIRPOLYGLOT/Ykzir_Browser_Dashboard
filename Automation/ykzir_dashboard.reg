@@ -1,0 +1,4 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
+"YkzirDashboard"="\"C:\\Users\\ykzir\\OneDrive\\Documents\\Programming\\Custom_Browser_Dashboard\\Automation\\ykzir_dashboard.bat\""

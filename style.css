@@ -1,81 +1,1923 @@
-:root { --accent: #7367f0; }
-.theme-midnight { --bg: #0b0e14; --side: #11141d; --text: #cfd3d7; --border: rgba(255,255,255,0.06); --card: #161a23; }
-.theme-emerald  { --bg: #06110f; --side: #0a1a18; --text: #cfd3d7; --border: rgba(255,255,255,0.06); --card: #12211e; }
-.theme-ocean    { --bg: #081018; --side: #0c1622; --text: #cfd3d7; --border: rgba(255,255,255,0.06); --card: #111d2b; }
-.theme-crimson  { --bg: #110808; --side: #1a0c0c; --text: #cfd3d7; --border: rgba(255,255,255,0.06); --card: #241212; }
-.theme-cyber    { --bg: #050505; --side: #0f0f0f; --text: #00ff41; --border: #00ff4133; --card: #000000; --accent: #00ff41; }
-.theme-slate    { --bg: #1e293b; --side: #0f172a; --text: #f1f5f9; --border: rgba(255,255,255,0.1); --card: #1e293b; }
-.theme-amber    { --bg: #1a120b; --side: #2c1e11; --text: #faedcd; --border: rgba(255,255,255,0.06); --card: #3d2b19; }
-.theme-rose     { --bg: #1a0b12; --side: #2c111e; --text: #ffe5ec; --border: rgba(255,255,255,0.06); --card: #3d192b; }
+#edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: none; /* Controlled by JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Higher than any other panel */
+    backdrop-filter: blur(5px);
+}
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; transition: 0.3s; }
 
-.app-container { display: flex; height: 100vh; }
-.sidebar { width: 260px; background: var(--side); padding: 25px; border-right: 1px solid var(--border); }
-.logo { display: flex; align-items: center; gap: 12px; font-weight: 700; margin-bottom: 40px; cursor: pointer; }
-.logo-icon { width: 30px; height: 30px; background: linear-gradient(45deg, var(--accent), #ce9ffc); border-radius: 8px; }
+#edit-modal .modal-content-wrapper {
+    background: rgba(15, 15, 15, 0.95); /* Deep dark background */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 30px;
+    border-radius: 20px;
+    width: 300px;
+    box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 20px rgba(212, 175, 55, 0.1);
+}
 
-.menu-section h4 { font-size: 11px; text-transform: uppercase; color: #676d7d; margin: 15px 0 10px; }
-.menu-section li { padding: 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-size: 14px; }
-.menu-section li:hover, .menu-section li.active { background: rgba(115, 103, 240, 0.15); color: var(--accent); }
+.gold-btn {
+    background: transparent;
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    padding: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-.main-content { flex: 1; overflow-y: auto; padding: 0 30px 30px; }
-.topbar { display: flex; justify-content: space-between; align-items: center; min-height: 80px; position: sticky; top: 0; background: var(--bg); z-index: 10; }
-.search-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; display: flex; align-items: center; padding: 0 15px; }
-.search-box input { background: transparent; border: none; color: inherit; padding: 10px; width: 200px; outline: none; }
+.gold-btn:hover {
+    background: #d4af37;
+    color: black;
+}
 
-.grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; margin-bottom: 30px; }
-.folder-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+:root {
+    --accent: #7367f0;
+}
 
-.modern-folder { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; transition: 0.25s ease; position: relative; }
-.folder-icon-box { display: flex; align-items: center; gap: 15px; cursor: pointer; }
-.folder-svg { width: 40px; height: 40px; }
-.folder-svg path { fill: var(--folder-color, var(--accent)); }
+.theme-midnight {
+    --bg: #0b0e14;
+    --side: #11141d;
+    --text: #cfd3d7;
+    --border: rgba(255, 255, 255, 0.06);
+    --card: #161a23;
+}
 
-.folder-content { max-height: 0; opacity: 0; overflow: hidden; transition: 0.4s ease; transform: translateY(-10px); }
-.modern-folder:hover .folder-content { max-height: 800px; opacity: 1; transform: translateY(0); padding-top: 15px; }
-.inner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.theme-emerald {
+    --bg: #06110f;
+    --side: #0a1a18;
+    --text: #cfd3d7;
+    --border: rgba(255, 255, 255, 0.06);
+    --card: #12211e;
+    --accent: #007a5c;
+}
 
-.item-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 12px; border-radius: 12px; text-align: center; position: relative; cursor: pointer; transition: 0.2s; }
-.item-card:hover { border-color: var(--accent); transform: scale(1.02); }
-.icon-box { width: 32px; height: 32px; margin: 0 auto 8px; }
-.icon-box img { width: 100%; height: 100%; object-fit: contain; }
+.theme-ocean {
+    --bg: #081018;
+    --side: #0c1622;
+    --text: #cfd3d7;
+    --border: rgba(255, 255, 255, 0.06);
+    --card: #111d2b;
+}
 
-.item-actions { position: absolute; top: 5px; right: 5px; opacity: 0; transition: 0.2s; z-index: 5; padding: 5px; cursor: pointer; }
-.item-card:hover .item-actions { opacity: 1; }
-.dropdown-menu { display: none; position: absolute; top: 25px; right: 0; background: var(--side); border: 1px solid var(--border); border-radius: 8px; width: 130px; z-index: 100; font-size: 11px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-.dropdown-menu.show { display: block; }
-.dropdown-menu div { padding: 10px; text-align: left; transition: 0.2s; }
-.dropdown-menu div:hover { background: var(--accent); color: white; }
+.theme-crimson {
+    --bg: #110808;
+    --side: #1a0c0c;
+    --text: #cfd3d7;
+    --border: rgba(255, 255, 255, 0.06);
+    --card: #241212;
+}
 
-/* Stats Styles */
-.stats-overview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
-.stat-card { background: var(--card); padding: 25px; border-radius: 15px; text-align: center; border: 1px solid var(--border); }
-.stat-card h3 { font-size: 28px; margin: 8px 0; }
-.stats-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.stats-list-card h3 { font-size: 14px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--accent); }
-.stats-item { display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
-.stats-item-name { font-size: 12px; font-weight: 600; }
-.stats-item-val { font-size: 12px; color: var(--accent); font-weight: 700; }
-.progress-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 5px; }
-.progress-bar-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: 0.5s; }
+.theme-cyber {
+    --bg: #050505;
+    --side: #0f0f0f;
+    --text: #00ff41;
+    --border: #00ff4133;
+    --card: #000000;
+    --accent: #686868;
+}
 
-.categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-.cat-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; text-align: center; }
+.theme-slate {
+    --bg: #1e293b;
+    --side: #0f172a;
+    --text: #f1f5f9;
+    --border: rgba(255, 255, 255, 0.1);
+    --card: #1e293b;
+}
 
-.view-panel { display: none; }
-.view-panel.active { display: block; animation: fadeIn 0.2s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.theme-amber {
+    --bg: #1a120b;
+    --side: #2c1e11;
+    --text: #faedcd;
+    --border: rgba(255, 255, 255, 0.06);
+    --card: #3d2b19;
+}
 
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; }
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-.modal { background: var(--card); padding: 25px; border-radius: 20px; width: 340px; border: 1px solid var(--border); }
-.modal input, .modal select { width: 100%; padding: 10px; margin-bottom: 12px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 8px; }
-.modal-btns { display: flex; justify-content: flex-end; }
-.btn-primary { background: var(--accent); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
-.btn-text { background: transparent; color: #666; border: none; cursor: pointer; margin-right: 10px; }
-.btn-reset { background: #ea5455; color: #fff; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; margin-top: 10px; }
-.avatar { width: 35px; height: 35px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-.bg-dots { background-image: radial-gradient(var(--accent) 0.5px, transparent 0.5px); background-size: 20px 20px; }
-.bg-mesh { background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 30px 30px; }
+.theme-rose {
+    --bg: #1a0b12;
+    --side: #2c111e;
+    --text: #ffe5ec;
+    --border: rgba(255, 255, 255, 0.06);
+    --card: #3d192b;
+}
+
+/* 1. Deep Amethyst - A regal, professional purple */
+.theme-amethyst {
+    --bg: #171325;
+    --side: #15122b;
+    --text: #e0def4;
+    --border: rgba(191, 185, 255, 0.1);
+    --card: #1b1735;
+    --accent: #908caa;
+}
+
+/* 2. Nord - Based on the famous arctic polar palette */
+.theme-nord {
+    --bg: #040b20;
+    --side: #242933;
+    --text: #eceff4;
+    --border: rgba(255, 255, 255, 0.05);
+    --card: #363654;
+    --accent: #88c0d0;
+}
+
+/* 3. Dracula - The classic high-contrast vampire theme */
+.theme-dracula {
+    --bg: #191a1f;
+    --side: #21222c;
+    --text: #f8f8f2;
+    --border: rgba(189, 147, 249, 0.2);
+    --card: #44475a;
+    --accent: #bd93f9;
+}
+
+/* 4. Gold Leaf - Luxury black and gold */
+.theme-gold {
+    --bg: #0d0d0d;
+    --side: #141414;
+    --text: #e6e6e6;
+    --border: rgba(212, 175, 55, 0.15);
+    --card: #1a1a1a;
+    --accent: #d4af37;
+}
+
+/* 5. Forest Shadow - Deep organic greens */
+.theme-forest {
+    --bg: #0b120b;
+    --side: #070d07;
+    --text: #d1d9d1;
+    --border: rgba(76, 175, 80, 0.1);
+    --card: #121d12;
+    --accent: #4caf50;
+}
+
+/* 6. Solarized Dark - Precision-engineered contrast */
+.theme-solar {
+    --bg: #002b36;
+    --side: #073642;
+    --text: #ffffff;
+    --border: rgba(147, 161, 161, 0.1);
+    --card: #00212b;
+    --accent: #268bd2;
+}
+
+/* 7. Tokyo Night - Modern neon city vibes */
+.theme-tokyo {
+    --bg: #1a1b26;
+    --side: #16161e;
+    --text: #a9b1d6;
+    --border: rgba(122, 162, 247, 0.15);
+    --card: #24283b;
+    --accent: #7aa2f7;
+}
+
+/* 8. Coffee Bean - Warm, roasted browns */
+.theme-coffee {
+    --bg: #120e0c;
+    --side: #1a1412;
+    --text: #ede0d4;
+    --border: rgba(127, 85, 57, 0.15);
+    --card: #241d1a;
+    --accent: #b08968;
+}
+
+/* 9. Void - Pure black with white outlines (OLED optimized) */
+.theme-void {
+    --bg: #000000;
+    --side: #050505;
+    --text: #ffffff;
+    --border: #333333;
+    --card: #0a0a0a;
+    --accent: #b90000;
+}
+
+/* 10. Matcha - Soothing pale green and cream */
+.theme-matcha {
+    --bg: #1b2019;
+    --side: #141812;
+    --text: #e8f0e6;
+    --border: rgba(169, 185, 153, 0.1);
+    --card: #252b22;
+    --accent: #a9b999;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background: var(--side);
+    padding: 25px;
+    border-right: 1px solid var(--border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    cursor: pointer;
+}
+
+/* 1. RESTORE THIS: The Small Icon in the Sidebar */
+.logo-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    background-image: url('Pics/mypic.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--border);
+    display: block;
+    /* Ensures it takes up space */
+}
+
+/* 2. KEEP THIS: The Big Image in the Pop-up */
+.modal-logo-display {
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    background-image: url('Pics/mypic.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: -40px; /* Positioned slightly above the image */
+    right: 0;
+    background: none;
+    border: none;
+    color: var(--accent); /* Uses your Gold color */
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.modal-close-btn:hover {
+    transform: scale(1.2);
+    color: #fff;
+}
+
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(15px);
+
+    /* CHANGE THIS: Use flex but hide it with opacity and pointer-events */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    /* Prevents clicking the modal when hidden */
+    transition: opacity 0.4s ease;
+}
+
+.sophisticated-name {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    
+    /* 1. The Moving Rainbow Text */
+    background: linear-gradient(
+        to right, 
+        #d4af37, #f2d06b, #ef4444, #8b5cf6, #3b82f6, #d4af37
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block; /* Ensures the gradient applies correctly */
+    
+    /* 2. Fixed Animation Names */
+    /* Syntax: [name] [duration] [timing] [iteration] */
+    animation: shine 3s linear infinite, glowPulse 3s ease-in-out infinite;
+}
+
+/* Initial State: Elegant Gold */
+.logo-frame-container {
+    display: inline-block;
+    padding: 6px; 
+    border-radius: 20px;
+    background: #d4af37; /* Static Gold */
+    position: relative;
+    margin-bottom: 15px;
+    transition: all 0.5s ease;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+/* Energized State: Pulsing/Throbbing Rainbow */
+.logo-frame-container.energized {
+    background: linear-gradient(45deg, 
+        #d4af37, #ef4444, #8b5cf6, #3b82f6, #d4af37
+    );
+    background-size: 300% 300%;
+    
+    /* 1. rainbowBorderSmooth: Moves the colors slowly (8s)
+       2. throbGlow: Handles the "breathing" light effect (3s)
+    */
+    animation: 
+        rainbowBorderSmooth 8s ease-in-out infinite, 
+        throbGlow 3s ease-in-out infinite;
+    
+    position: relative;
+}
+
+/* Animation for the Colors moving */
+@keyframes rainbowBorderSmooth {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Animation for the Throbbing/Breathing Light */
+@keyframes throbGlow {
+    0%, 100% { 
+        /* Dim state */
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        filter: brightness(1);
+        transform: scale(1);
+    }
+    50% { 
+        /* Bright "Peak" of the throb */
+        box-shadow: 0 0 35px rgba(212, 175, 55, 0.7), 0 0 60px rgba(255, 255, 255, 0.2);
+        filter: brightness(1.3); /* Makes the colors "pop" */
+        transform: scale(1.01); /* Very slight physical pulse */
+    }
+}
+
+/* Lightning Bolt Styling */
+.lightning-bolt {
+    position: absolute;
+    stroke: #fff;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px #3b82f6);
+    fill: none;
+    opacity: 0;
+    animation: boltFade 0.3s ease-out forwards;
+}
+
+@keyframes boltFade {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes rainbowBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Screen Shake when hit */
+.shake {
+    animation: shakeEffect 0.3s ease-in-out;
+}
+
+@keyframes shakeEffect {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-5px, 5px); }
+    50% { transform: translate(5px, -5px); }
+    75% { transform: translate(-5px, -5px); }
+}
+
+/* Animation 1: Moves the rainbow gradient across the text */
+@keyframes shine {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* Animation 2: Creates the sophisticated rainbow glow and subtle pulse */
+@keyframes glowPulse {
+    0%, 100% { 
+        filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5));
+        transform: scale(1);
+    }
+    33% { 
+        filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.6)); /* Reddish glow */
+    }
+    66% { 
+        filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6)); /* Bluish glow */
+        transform: scale(1.03);
+    }
+}
+
+/* Sophisticated Scale-up Animation */
+.modal-content-wrapper {
+    transform: scale(0.8) translateY(20px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Active State */
+.image-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+    /* Allows clicking when visible */
+}
+
+.image-modal.active .modal-content-wrapper {
+    transform: scale(1) translateY(0);
+}
+
+.menu-section h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #676d7d;
+    margin: 15px 0 10px;
+}
+
+.menu-section li {
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+.menu-section li:hover,
+.menu-section li.active {
+    background: rgba(115, 103, 240, 0.15);
+    color: var(--accent);
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    /* Remove horizontal padding here */
+    padding: 0; 
+    position: relative;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 80px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    /* Add padding INSIDE the topbar so text doesn't touch the very edge */
+    padding: 0 30px; 
+    /* Optional: add a border to define the edge against the background */
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Add the 30px padding back to the actual content views */
+.view-panel {
+    padding: 20px 30px 30px;
+}
+
+/* KEEP ORIGINAL STYLES */
+.search-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    position: relative; /* ADD THIS: Essential for the dropdown to align */
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 10px;
+    width: 200px;
+    outline: none;
+}
+
+/* ADD THESE NEW STYLES BELOW */
+.search-results-dropdown {
+    position: absolute;
+    top: calc(100% + 10px); /* Appears 10px below the search box */
+    left: 0;
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none; /* Hidden until you start typing */
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 8px;
+}
+
+/* Style for each quote result */
+.search-item {
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.search-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.search-item .lang-tag {
+    font-size: 10px;
+    background: var(--accent);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+    min-height: 50px;
+}
+
+.folder-shelf {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.modern-folder {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    transition: 0.25s ease;
+    cursor: pointer;
+}
+
+.modern-folder:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+}
+
+.folder-icon-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    pointer-events: none;
+}
+
+.folder-svg {
+    width: 40px;
+    height: 40px;
+}
+
+.folder-svg path {
+    fill: var(--folder-color, var(--accent));
+}
+
+.drag-over {
+    border-color: var(--accent) !important;
+    background: rgba(115, 103, 240, 0.1) !important;
+}
+
+.dragging {
+    opacity: 0.4;
+    transform: scale(0.95);
+}
+
+.inner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+}
+
+/* FOLDER WINDOW POPUP */
+.folder-window-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.folder-window-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.folder-window {
+    background: var(--card);
+    width: 680px;
+    height: 500px;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+.folder-window-overlay.show .folder-window {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.window-header {
+    background: var(--side);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.window-nav-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-btn,
+.window-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: 0.2s;
+    padding: 5px;
+}
+
+.nav-btn:hover,
+.window-close-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.window-title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.window-content {
+    flex: 1;
+    padding: 5px;
+    overflow-y: auto;
+}
+
+/* NEW DROP ZONE */
+.drop-to-root-zone {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+
+.drop-to-root-zone.drag-over {
+    background: rgba(115, 103, 240, 0.2) !important;
+    color: var(--accent);
+    opacity: 1;
+    border-top-color: var(--accent);
+}
+
+.item-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.item-card:hover {
+    border-color: var(--accent);
+    transform: scale(1.02);
+}
+
+.icon-box {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto 8px;
+    pointer-events: none;
+}
+
+.icon-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.item-actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    opacity: 0;
+    transition: 0.2s;
+    z-index: 5;
+}
+
+.item-card:hover .item-actions {
+    opacity: 1;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 25px;
+    right: 0;
+    background: var(--side);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 130px;
+    z-index: 100;
+    font-size: 11px;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu div {
+    padding: 10px;
+    text-align: left;
+}
+
+.dropdown-menu div:hover {
+    background: var(--accent);
+}
+
+.stats-overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.stats-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.stats-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.view-panel {
+    display: none;
+}
+
+.view-panel.active {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 400;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 20px;
+    width: 340px;
+    border: 1px solid var(--border);
+}
+
+.modal input,
+.modal select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    background: #000;
+    border: 1px solid var(--border);
+    color: #fff;
+    border-radius: 8px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* --- Sophisticated & Distinct Background Styles --- */
+/* 1. Solid: Pure flat color */
+.style-solid {
+    background: var(--bg) !important;
+}
+
+/* 2. Gradient: Visible depth transition from Side color to BG color */
+.style-gradient {
+    background-image: radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(0, 255, 65, 0.05) 0px, transparent 50%) !important;
+    background-size: cover !important;
+}
+
+/* 3. Dots: Technical Blueprint style */
+.style-dots {
+    background-color: var(--bg) !important;
+    background-image: radial-gradient(var(--accent) 0.8px, transparent 0) !important;
+    background-size: 24px 24px !important;
+    background-attachment: fixed !important;
+}
+
+/* 4. Mesh (Net): A true intersecting grid pattern */
+.style-mesh {
+    background-color: var(--bg) !important;
+    /* This creates horizontal and vertical lines to look like a Net/Mesh */
+    background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px) !important;
+    background-size: 40px 40px !important;
+    /* Size of the net squares */
+    background-attachment: fixed !important;
+}
+
+/* Optional: Add a subtle glow to the Mesh/Net so it's not too "flat" */
+.style-mesh::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 20%, var(--bg) 90%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+
+
+/* 5. Cyber Grid: A more aggressive, glowing neon net */
+.style-cybergrid {
+    background-color: var(--bg) !important;
+    background-image:
+        linear-gradient(rgba(115, 103, 240, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(115, 103, 240, 0.3) 1px, transparent 1px) !important;
+    background-size: 100px 100px, 100px 100px !important;
+    background-attachment: fixed !important;
+}
+
+/* 6. Blueprint: Angled lines for a technical draft look */
+.style-blueprint {
+    background-color: var(--bg) !important;
+    background-image:
+        repeating-linear-gradient(45deg, var(--border) 0, var(--border) 1px, transparent 0, transparent 50%) !important;
+    background-size: 10px 10px !important;
+    background-attachment: fixed !important;
+}
+
+/* 7. Topography: Mimics map elevation lines */
+.style-topo {
+    background-color: var(--bg) !important;
+    background-image: repeating-radial-gradient(circle at 0% 0%, var(--border) 0, var(--border) 1px, transparent 1px, transparent 40px) !important;
+    background-attachment: fixed !important;
+}
+
+/* 8. Circuit: Geometric square patterns like a motherboard */
+.style-circuit {
+    background-color: var(--bg) !important;
+    background-image:
+        linear-gradient(var(--border) 2px, transparent 2px),
+        linear-gradient(90deg, var(--border) 2px, transparent 2px) !important;
+    background-size: 100px 100px, 100px 100px !important;
+    background-position: -1px -1px, -1px -1px !important;
+}
+
+/* 9. Hexagon Web: Sophisticated honeycomb texture */
+.style-hex {
+    background-color: var(--bg) !important;
+    background-image:
+        radial-gradient(circle at center, var(--accent) 0.5px, transparent 0.5px),
+        repeating-conic-gradient(from 30deg, rgba(255, 255, 255, 0.03) 0% 60deg, transparent 0% 120deg) !important;
+    background-size: 30px 18px !important;
+}
+
+/* 10. Scanline: Retro CRT monitor effect */
+.style-scanline {
+    background-color: var(--bg) !important;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 50%, transparent 50%) !important;
+    background-size: 100% 4px !important;
+}
+
+/* 11. Stardust: Random-sized "stars" with depth */
+.style-stardust {
+    background-color: var(--bg) !important;
+    background-image:
+        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(1.5px 1.5px at 40px 70px, var(--accent), rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0, 0, 0, 0)) !important;
+    background-size: 150px 150px !important;
+}
+
+/* 12. Carbon Fiber: Diagonal woven texture */
+.style-carbon {
+    background:
+        linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+        linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+        linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+        linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+        var(--bg) !important;
+    background-size: 20px 20px !important;
+}
+
+/* 13. Prism: Subtle rainbow light leak across corners */
+.style-prism {
+    background-color: var(--bg) !important;
+    background-image:
+        conic-gradient(from 0deg at 0% 0%, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.05), rgba(0, 0, 255, 0.05), transparent) !important;
+    background-attachment: fixed !important;
+}
+
+/* 14. Glitch: Horizontal static noise texture */
+.style-glitch {
+    background-color: var(--bg) !important;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.02) 1px, rgba(255, 255, 255, 0.02) 2px) !important;
+}
+
+
+
+
+/* Ensure the grid container is visible */
+.stats-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 25px;
+    width: 100%;
+}
+
+/* Ensure the cards have a background and visible borders */
+.stats-list-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    min-height: 250px;
+    /* Forces the card to be visible even if empty */
+    display: flex;
+    flex-direction: column;
+}
+
+.stats-list-card h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+}
+
+.stats-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual list item styling */
+.stats-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: 0.2s;
+}
+
+.stats-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--border);
+}
+
+
+/* Container for the Category View */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Sophisticated Category Card */
+.cat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 16px;
+    transition: 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 120px;
+}
+
+.cat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cat-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text);
+}
+
+.cat-card p {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+/* Modernized Delete Button */
+.cat-card button {
+    align-self: flex-start;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.2s;
+}
+
+.cat-card button:hover {
+    background: #ea5455 !important;
+    color: #fff !important;
+}
+
+/* --- Sophisticated Modal Styling --- */
+.modal {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Consistent spacing between all elements */
+}
+
+.modal h3 {
+    margin: 0 0 10px 0;
+    color: var(--text);
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+/* Style for Inputs and Select */
+.modal input,
+.modal select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    padding: 12px 15px;
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.modal input:focus,
+.modal select:focus {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Modernizing the dropdown arrow */
+.modal select {
+    cursor: pointer;
+    appearance: none;
+    /* Removes default browser look */
+}
+
+/* Button Container */
+.modal-btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.btn-text {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-primary {
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: white !important;
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
+    /* Vital for reading "Save" on yellow/light colors */
+
+    /* Animation settings */
+    animation: rainbowCycle 8s infinite alternate;
+}
+
+/* The Rainbow to Dark Rainbow Animation */
+@keyframes rainbowCycle {
+
+    /* Vibrant Rainbow Starts */
+    0% {
+        background-color: #ff0000;
+    }
+
+    /* Red */
+    15% {
+        background-color: #ffcc00;
+    }
+
+    /* Yellow */
+    30% {
+        background-color: #00ff00;
+    }
+
+    /* Green */
+    45% {
+        background-color: #00ccff;
+    }
+
+    /* Blue */
+
+    /* Transition to Dark Rainbow (Jewel Tones) */
+    60% {
+        background-color: #800000;
+    }
+
+    /* Dark Maroon */
+    75% {
+        background-color: #4b0082;
+    }
+
+    /* Indigo / Deep Purple */
+    90% {
+        background-color: #004d40;
+    }
+
+    /* Deep Teal */
+    100% {
+        background-color: #1a237e;
+    }
+
+    /* Deep Navy */
+}
+
+
+
+
+
+/* Container for each setting item */
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+/* Label Styling */
+.setting-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+}
+
+/* The Select Dropdown */
+#themeSelect {
+    width: 100%;
+    padding: 12px 15px;
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    appearance: none;
+    /* Removes default OS arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+#themeSelect:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(115, 103, 240, 0.1);
+}
+
+#themeSelect:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Styling the Option Groups and Options */
+#themeSelect optgroup {
+    background: var(--side);
+    color: var(--accent);
+    font-weight: bold;
+    font-style: normal;
+}
+
+#themeSelect option {
+    background: var(--side);
+    color: var(--text);
+    padding: 10px;
+    font-weight: normal;
+}
+
+
+/* Full-screen Hover Overlay */
+.hover-hint {
+    position: fixed;
+    /* Fixed to the screen, not the sidebar */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    /* Darkens the whole dashboard slightly */
+    backdrop-filter: blur(4px);
+    /* Sophisticated background blur */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Puts text exactly in the middle */
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    /* Allows you to click "through" the text to hit the logo */
+    transition: all 0.5s ease;
+    z-index: 9998;
+    /* Just below the actual pop-up modal */
+}
+
+/* Big Text Styling */
+.id-text {
+    font-size: 1.8rem;
+    /* Big impact */
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.en-text {
+    font-size: 1.8rem;
+    color: rgba(0, 172, 172, 0.7);
+    font-style: italic;
+    margin-top: 10px;
+}
+
+/* 1. The Base State (Hidden) */
+.hover-hint {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    /* Semi-transparent overlay */
+    backdrop-filter: blur(8px);
+    /* Sophisticated blur */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    /* Animation settings */
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    /* Starts slightly zoomed in */
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    z-index: 9998;
+    pointer-events: none;
+    /* Crucial: ensures you can still click the logo "through" the text */
+}
+
+/* 2. The Trigger State (Visible) */
+.logo-container:hover .hover-hint {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    /* Zooms into focus */
+}
+
+.logo-container {
+    position: relative;
+    cursor: pointer;
+    z-index: 5;
+    /* Ensure it stays above the sidebar background */
+}
+
+/* This prevents the hover text from blocking the "click" if it's in the way */
+.hover-hint {
+    pointer-events: none;
+}
+
+/* Container for spacing */
+.danger-zone-container {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(234, 84, 85, 0.3);
+}
+
+/* The Danger Card itself */
+.danger-card {
+    background: rgba(234, 84, 85, 0.05);
+    /* Very subtle red tint */
+    border: 1px solid rgba(234, 84, 85, 0.2);
+    border-radius: 18px;
+    padding: 24px;
+    transition: 0.3s;
+}
+
+.danger-card:hover {
+    background: rgba(234, 84, 85, 0.08);
+    border-color: #ea5455;
+}
+
+.danger-card h3 {
+    color: #ea5455;
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.danger-card p {
+    font-size: 13px;
+    color: var(--text);
+    opacity: 0.7;
+    margin-bottom: 20px;
+}
+
+/* The Reset Button */
+.btn-danger {
+    background: transparent;
+    color: #ea5455;
+    border: 1px solid #ea5455;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-danger:hover {
+    background: #ea5455;
+    color: white;
+    box-shadow: 0 4px 15px rgba(234, 84, 85, 0.4);
+}
+
+/* 1. The Clock Wrapper (The Anchor) */
+.avatar-clock-wrapper {
+    position: relative;
+    cursor: pointer;
+}
+
+/* 2. The Clock Frame */
+.avatar {
+    /* Use min-width to prevent jumping, but let it grow if needed */
+    min-width: 140px; 
+    height: auto; /* Let padding define the height */
+    padding: 8px 15px; /* Vertical and Horizontal breathing room */
+    
+    background: var(--accent);
+    border-radius: 12px;
+    
+    display: inline-flex; /* Changed to inline-flex to wrap text tightly */
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+#live-clock {
+    color: #ffffff; 
+    font-weight: bold;
+    font-size: 1.5rem;
+    /* Use tabular-nums to prevent the frame from "wiggling" as numbers change */
+    font-variant-numeric: tabular-nums; 
+    white-space: nowrap; /* Prevents time from breaking into two lines */
+    
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000,
+         0px  0px 5px rgba(0,0,0,0.5);
+}
+
+/* 3. The Wisdom Overlay (The "Middle of Screen" Pop-up) */
+.quote-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    /* Match your hover-hint overlay */
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    /* Animation settings matched to your hover-hint */
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    z-index: 9998;
+    pointer-events: none;
+    /* Allows clicking through to the clock */
+}
+
+/* 4. The "Middle" Text Box */
+.quote-content {
+    background: var(--card);
+    border: 2px solid var(--accent);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* 5. THE TRIGGER: Exactly like your logo-container:hover */
+.avatar-clock-wrapper:hover .quote-modal-overlay {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+/* Typography */
+#daily-quote {
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+
+
+
+
+
+/* --- Flexible Sophisticated Popup with Rainbow Border --- */
+
+#hoverNote {
+    position: fixed;
+    display: none;
+    z-index: 10000;
+    background: rgba(15, 15, 15, 0.9); 
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 15px;
+    
+    /* --- FLEXIBILITY SETTINGS --- */
+    min-width: 150px;      /* Minimum size for "No note" */
+    max-width: 350px;      /* Maximum width before it wraps text */
+    width: fit-content;    /* Shrink-wrap to content */
+    height: auto;          /* Grow vertically with text */
+    
+    color: #fff;
+    pointer-events: auto;
+    overflow: hidden; 
+    box-sizing: border-box;
+}
+
+/* 1. The Rainbow Layer (Optimized for flexible size) */
+#hoverNote::before {
+    content: '';
+    position: absolute;
+    /* Use a huge offset to ensure the spinning gradient covers all corners even when the box is long */
+    top: -150%; 
+    left: -150%;
+    width: 400%;
+    height: 400%;
+    background: conic-gradient(
+        #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000
+    );
+    animation: fast-rainbow-spin 1s linear infinite;
+    z-index: -2;
+}
+
+/* 2. The Inner Mask (The actual box background) */
+#hoverNote::after {
+    content: '';
+    position: absolute;
+    inset: 3px; /* Border thickness */
+    background: rgba(15, 15, 15, 0.95);
+    border-radius: 9px;
+    z-index: -1;
+    box-shadow: 
+        0 0 10px 1px rgba(255, 255, 255, 0.1),
+        0 0 20px 4px var(--accent);
+}
+
+/* Ensure text wraps correctly in the flexible box */
+.note-content {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    color: #eee;
+    word-wrap: break-word; /* Prevents long URLs from breaking the box */
+    white-space: pre-wrap; /* Preserves line breaks from your notes */
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes fast-rainbow-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+
+#edit-modal {
+    display: none; /* Keep it hidden until we call openEditMenu() */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85); /* Deep dark overlay */
+    backdrop-filter: blur(10px); /* Premium blur effect */
+    justify-content: center;
+    align-items: center;
+    z-index: 10000; /* Ensure it stays above EVERYTHING */
+}
+
+
+/* Target the Parent Folder Select specifically */
+#folderParentSelect {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background: rgba(10, 10, 10, 0.8); /* Dark base matching the dashboard */
+    color: #e0e0e0; /* Off-white text */
+    border: 1px solid #d4af37; /* The signature Gold border */
+    border-radius: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    
+    /* Modern arrow styling */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    transition: all 0.3s ease;
+}
+
+/* Hover & Focus Effects */
+#folderParentSelect:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #f1c40f; /* Brighter gold on hover */
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+#folderParentSelect:focus {
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Style the actual options list (limited browser support but helps) */
+#folderParentSelect option {
+    background: #1a1a1a;
+    color: white;
+    padding: 10px;
+}
+
+/* Ykzir Dashboard V4 - Modern Dropdown Theme
+   Targeting #linkCatSelect and general .modern-select classes 
+*/
+
+#linkCatSelect, 
+#folderParentSelect, 
+.modern-select {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    background: rgba(12, 12, 12, 0.85); /* Deep dashboard dark */
+    backdrop-filter: blur(12px); /* Windows 11 / MacOS Glass effect */
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff;
+    border: 1px solid #d4af37; /* Signature Ykzir Gold */
+    border-radius: 6px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    line-height: 1.6; /* Prevents Aksara Jawa clipping */
+    cursor: pointer;
+    outline: none;
+    transition: all 0.25s ease-in-out;
+    
+    /* Reset Browser Styles */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Custom Gold Arrow Icon */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Hover & Focus Interactions */
+#linkCatSelect:hover {
+    background: rgba(30, 30, 30, 0.9);
+    border-color: #f1c40f; /* Brighter gold */
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+}
+
+#linkCatSelect:focus {
+    border-color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+}
+
+/* Internal Options Styling (Limited browser support, but keeps it dark) */
+#linkCatSelect option {
+    background-color: #111111;
+    color: #ffffff;
+    padding: 10px;
+    font-size: 14px;
+}
+
+/* Optional: Subtle Labeling for the dropdown */
+.select-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    color: #d4af37;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+#bgStyleSelect {
+    appearance: none; /* Removes default browser styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    background-color: #1a1a1a;
+    color: #00ffcc; /* Neon accent color */
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 10px 40px 10px 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    
+    /* Custom Arrow using SVG Background */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ffcc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 18px;
+    
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover & Focus States */
+#bgStyleSelect:hover {
+    border-color: #00ffcc;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+}
+
+#bgStyleSelect:focus {
+    border-color: #00ffcc;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+}
+
+/* Styling the options (Limited browser support for <option> tags) */
+#bgStyleSelect option {
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 10px;
+}
+
+#folderStyleSelect {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #0f172a; /* Deep slate blue */
+    color: #f8fafc;
+    border: 1px solid #334155;
+    border-radius: 4px; /* Sudut sedikit lebih tajam untuk kesan "Shield/Gem" */
+    padding: 8px 35px 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Custom Icon: Diamond/Gem shape */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 3h12l4 6-10 12L2 9z'%3e%3c/path%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* State saat di-hover */
+#folderStyleSelect:hover {
+    border-color: #38bdf8; /* Light blue accent */
+    background-color: #1e293b;
+}
+
+/* Efek saat diklik/fokus */
+#folderStyleSelect:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+/* Styling sederhana untuk isi dropdown */
+#folderStyleSelect option {
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+
+/* Switch Styling */
+.toggle-switch {
+    width: 38px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-ball {
+    width: 12px;
+    height: 12px;
+    background: #666;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* On State (Gold) */
+.toggle-switch.active {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: #d4af37;
+}
+
+.toggle-switch.active .toggle-ball {
+    background: #d4af37;
+    transform: translateX(18px);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+}
+
+/* Behavior when disabled */
+body.notes-disabled #hoverNote {
+    display: none !important;
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,178 +9,331 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body class="theme-midnight">
 
-<div class="app-container">
-    <aside class="sidebar">
-        <a href="https://ykzirpolyglot.github.io/vcard/" target="_blank" class="logo-link" style="text-decoration: none; color: inherit;">
+    <div class="app-container">
+        <aside class="sidebar" id="mainSidebar">
             <div class="logo">
-                <div class="logo-icon"></div>
-                <span>Ykzir Polyglot</span>
-            </div>
-        </a>
-        
-        <nav id="sidebarNav">
-            <div class="menu-section">
-                <h4>Main</h4>
-                <ul>
-                    <li class="active" data-view="dashboard"><i data-lucide="layout-grid"></i> Dashboard</li>
-                    <li data-view="categories"><i data-lucide="layers"></i> Categories</li>
-                </ul>
-            </div>
-            <div class="menu-section">
-                <h4>Management</h4>
-                <ul>
-                    <li onclick="openModal('linkModal')"><i data-lucide="link"></i> Add Link</li>
-                    <li onclick="openModal('folderModal')"><i data-lucide="folder-plus"></i> Add Folder</li>
-                    <li id="importTrigger"><i data-lucide="upload"></i> Import JSON</li>
-                    <li onclick="exportData()"><i data-lucide="download"></i> Export JSON</li>
-                </ul>
-            </div>
-            <div class="menu-section">
-                <h4>System</h4>
-                <ul>
-                    <li data-view="statistics"><i data-lucide="bar-chart-3"></i> Statistics</li>
-                    <li data-view="settings"><i data-lucide="settings"></i> Settings</li>
-                </ul>
-            </div>
-        </nav>
-        <input type="file" id="importInput" style="display:none" accept=".json">
-    </aside>
+                <div class="logo-container" onclick="openImageModal()">
+                    <div class="logo-icon"></div>
+                    <div class="hover-hint">
+                        <span class="id-text">Click untuk memperbesar Foto</span>
+                        <span class="en-text">Click to enlarge Photo</span>
+                    </div>
+                </div>
 
-    <main class="main-content">
-        <header class="topbar">
-            <h2 id="viewTitle">Dashboard</h2>
-            <div class="search-box">
-                <i data-lucide="search"></i>
-                <input type="text" id="globalSearch" placeholder="Search apps...">
+                <a href="https://ykzirpolyglot.github.io/vcard/" target="_blank" class="logo-link"
+                    style="text-decoration: none; color: inherit;">
+                    <span>Ykzir Polyglot</span>
+                </a>
             </div>
-            <div class="user-profile"><div class="avatar">UR</div></div>
-        </header>
 
-        <div id="view-dashboard" class="view-panel active">
-            <div id="uncategorized-container" class="grid-layout"></div>
-            <div id="folder-container" class="folder-shelf"></div>
-        </div>
+            </a>
 
-        <div id="view-categories" class="view-panel">
-            <div id="categoriesGrid" class="categories-grid"></div>
-        </div>
+            <nav id="sidebarNav">
+                <div class="menu-section">
+                    <h4>Main</h4>
+                    <ul>
+                        <li class="active" data-view="dashboard"><i data-lucide="layout-grid"></i> Dashboard</li>
+                        <li data-view="categories"><i data-lucide="layers"></i> Categories</li>
+                    </ul>
+                </div>
+                <div class="menu-section">
+                    <h4>Management</h4>
+                    <ul>
+                        <li onclick="openModal('linkModal')"><i data-lucide="link"></i> Add Link</li>
+                        <li onclick="openModal('folderModal')"><i data-lucide="folder-plus"></i> Add Folder</li>
 
-        <div id="view-statistics" class="view-panel">
-            <section class="stats-overview">
-                <div class="stat-card">
-                    <i data-lucide="mouse-pointer-2" style="color:var(--accent)"></i>
-                    <h3 id="stat-totalClicks">0</h3>
-                    <p>Total Clicks</p>
+                        <li id="importTrigger">
+                            <i data-lucide="upload"></i> Import JSON
+                        </li>
+                        <input type="file" id="importInput" style="display:none;" accept=".json">
+                        <li onclick="exportData()"><i data-lucide="download"></i> Export JSON</li>
+                    </ul>
                 </div>
-                <div class="stat-card">
-                    <i data-lucide="package" style="color:#28c76f"></i>
-                    <h3 id="stat-totalApps">0</h3>
-                    <p>Total Shortcuts</p>
+                <div class="menu-section">
+                    <h4>System</h4>
+                    <ul>
+                        <li data-view="statistics"><i data-lucide="bar-chart-3"></i> Statistics</li>
+                        <li data-view="settings"><i data-lucide="settings"></i> Settings</li>
+                    </ul>
                 </div>
-                <div class="stat-card">
-                    <i data-lucide="tag" style="color:#00cfe8"></i>
-                    <h3 id="stat-totalCats">0</h3>
-                    <p>Total Categories</p>
-                </div>
-            </section>
+            </nav>
+            <input type="file" id="importInput" style="display:none" accept=".json">
+        </aside>
 
-            <div class="stats-detail-grid">
-                <div class="card stats-list-card">
-                    <h3><i data-lucide="trending-up"></i> Top 5 Most Used</h3>
-                    <div id="top-apps-list" class="stats-list"></div>
+        <main class="main-content" ondragover="handleDragOver(event)" ondrop="handleDropToRoot(event)">
+            <header class="topbar">
+                <h2 id="viewTitle">Dashboard</h2>
+                <div class="search-box">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="globalSearch" placeholder="Search uncategorized apps...">
                 </div>
-                <div class="card stats-list-card">
-                    <h3><i data-lucide="pie-chart"></i> Category Distribution</h3>
-                    <div id="cat-dist-list" class="stats-list"></div>
-                </div>
-            </div>
-        </div>
 
-        <div id="view-settings" class="view-panel">
-            <div class="card settings-card">
-                <h3>Visual Preferences</h3>
-                <div class="setting-group">
-                    <label>Master Theme</label>
-                    <select id="themeSelect" onchange="changeTheme(this.value)">
-                        <option value="theme-midnight">Midnight Lavender</option>
-                        <option value="theme-emerald">Emerald Forest</option>
-                        <option value="theme-ocean">Deep Ocean</option>
-                        <option value="theme-crimson">Crimson Night</option>
-                        <option value="theme-amber">Amber Sunset</option>
-                        <option value="theme-slate">Modern Slate</option>
-                        <option value="theme-cyber">Cyberpunk Neon</option>
-                        <option value="theme-rose">Rose Quartz</option>
-                    </select>
-                </div>
-                <div class="setting-group"><label>Folder Color</label><input type="color" id="folderColorPicker" onchange="updateVisuals()"></div>
-                <div class="setting-group">
-                    <label>Background Style</label>
-                    <select id="bgStyleSelect" onchange="updateVisuals()">
-                        <option value="solid">Solid</option>
-                        <option value="gradient">Gradient</option>
-                        <option value="dots">Dots</option>
-                        <option value="mesh">Mesh</option>
-                    </select>
-                </div>
-                <div class="setting-group">
-                    <label>Folder Icon</label>
-                    <select id="folderStyleSelect" onchange="updateVisuals()">
-                        <option value="classic">Classic</option>
-                        <option value="hexagon">Hexagon</option>
-                        <option value="shield">Shield</option>
-                        <option value="gem">Gem</option>
-                    </select>
-                </div>
-            </div>
-            <div class="card settings-card danger-zone">
-                <h3 style="color: #ea5455;">Danger Zone</h3>
-                <p style="font-size: 12px; margin-bottom: 15px;">Reset all dashboard data to factory settings.</p>
-                <button class="btn-reset" onclick="resetEverything()">RESET ALL DATA</button>
-            </div>
-        </div>
-    </main>
-</div>
-
-<div id="linkModal" class="modal-overlay">
-    <div class="modal">
-        <h3>Add Shortcut</h3>
-        <input type="text" id="linkName" placeholder="Name">
-        <input type="text" id="linkUrl" placeholder="URL">
-        <select id="linkCatSelect"></select>
-        <div class="modal-btns">
-            <button class="btn-text" onclick="closeModals()">Cancel</button>
-            <button class="btn-primary" onclick="saveLink()">Save</button>
+                <div class="toggle-container">
+        <span class="toggle-label">PopUp Note</span>
+        <div class="toggle-switch active" id="noteToggle" onclick="toggleHoverNotes()" title="Toggle Hover Notes">
+            <div class="toggle-ball"></div>
         </div>
     </div>
-</div>
 
-<div id="folderModal" class="modal-overlay">
-    <div class="modal">
-        <h3>Add Category</h3>
-        <input type="text" id="folderName" placeholder="Category Name">
-        <div class="modal-btns">
-            <button class="btn-text" onclick="closeModals()">Cancel</button>
-            <button class="btn-primary" onclick="saveFolder()">Create</button>
+                <div class="avatar-clock-wrapper">
+                    <div class="avatar" onclick="window.open('https://calendar.google.com', '_blank')">
+                        <span id="live-clock">00:00</span>
+
+                    </div>
+
+                    <div class="quote-modal-overlay">
+                        <div class="quote-content">
+                            <p id="daily-quote">Loading wisdom...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </header>
+
+            <div id="view-dashboard" class="view-panel active">
+                <div id="uncategorized-container" class="grid-layout drop-zone" ondragover="handleDragOver(event)"
+                    ondrop="handleDropToRoot(event)"></div>
+                <div id="folder-container" class="folder-shelf"></div>
+            </div>
+
+            <div id="view-categories" class="view-panel">
+                <div id="categoriesGrid" class="categories-grid"></div>
+            </div>
+
+            <div id="view-statistics" class="view-panel">
+                <section class="stats-overview">
+                    <div class="stat-card"><i data-lucide="mouse-pointer-2" style="color:var(--accent)"></i>
+                        <h3 id="stat-totalClicks">0</h3>
+                        <p>Total Clicks</p>
+                    </div>
+                    <div class="stat-card"><i data-lucide="package" style="color:#28c76f"></i>
+                        <h3 id="stat-totalApps">0</h3>
+                        <p>Total Shortcuts</p>
+                    </div>
+                    <div class="stat-card"><i data-lucide="tag" style="color:#00cfe8"></i>
+                        <h3 id="stat-totalCats">0</h3>
+                        <p>Total Categories</p>
+                    </div>
+                </section>
+                <div class="stats-detail-grid">
+                    <div class="card stats-list-card">
+                        <h3><i data-lucide="trending-up"></i> Top 5 Most Used</h3>
+                        <div id="top-apps-list" class="stats-list"></div>
+                    </div>
+                    <div class="card stats-list-card">
+                        <h3><i data-lucide="pie-chart"></i> Category Distribution</h3>
+                        <div id="cat-dist-list" class="stats-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-settings" class="view-panel">
+                <div class="card settings-card">
+                    <h3>Visual Preferences</h3>
+                    <div class="setting-group"><label>Master Theme</label>
+                        <select id="themeSelect" onchange="changeTheme(this.value)">
+                            <optgroup label="Originals">
+                                <option value="theme-midnight">Midnight Lavender</option>
+                                <option value="theme-emerald">Emerald Forest</option>
+                                <option value="theme-ocean">Deep Ocean</option>
+                                <option value="theme-crimson">Crimson Night</option>
+                                <option value="theme-cyber">Cyberpunk Neon</option>
+                                <option value="theme-slate">Modern Slate</option>
+                                <option value="theme-amber">Amber Sunset</option>
+                                <option value="theme-rose">Rose Quartz</option>
+                            </optgroup>
+                            <optgroup label="New Collections">
+                                <option value="theme-amethyst">Deep Amethyst</option>
+                                <option value="theme-nord">Nordic Polar</option>
+                                <option value="theme-dracula">Dracula Dark</option>
+                                <option value="theme-gold">Gold Leaf</option>
+                                <option value="theme-forest">Forest Shadow</option>
+                                <option value="theme-solar">Solarized Dark</option>
+                                <option value="theme-tokyo">Tokyo Night</option>
+                                <option value="theme-coffee">Coffee Bean</option>
+                                <option value="theme-void">Absolute Void</option>
+                                <option value="theme-matcha">Matcha Green</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="setting-group"><label>Folder Color</label><input type="color" id="folderColorPicker"
+                            onchange="updateVisuals()"></div>
+                    <div class="setting-group"><label>Background Style</label>
+                        <select id="bgStyleSelect" onchange="updateVisuals()">
+                            <option value="solid">Solid</option>
+                            <option value="gradient">Gradient</option>
+                            <option value="dots">Dots</option>
+                            <option value="mesh">Mesh</option>
+                            <option value="cybergrid">Cyber Grid</option>
+                            <option value="blueprint">Blueprint</option>
+                            <option value="topo">Topography</option>
+                            <option value="circuit">Circuit</option>
+                            <option value="hex">Hexagon</option>
+                            <option value="scanline">Scanline</option>
+                            <option value="stardust">Stardust</option>
+                            <option value="carbon">Carbon Fiber</option>
+                            <option value="prism">Prism</option>
+                            <option value="glitch">Glitch</option>
+                        </select>
+                    </div>
+                    <div class="setting-group"><label>Folder Icon</label>
+                        <select id="folderStyleSelect" onchange="updateVisuals()">
+                            <option value="classic">Classic</option>
+                            <option value="hexagon">Hexagon</option>
+                            <option value="shield">Shield</option>
+                            <option value="gem">Gem</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="danger-zone-container">
+                    <div class="danger-card">
+                        <h3><i data-lucide="alert-triangle"></i> Danger Zone</h3>
+                        <p>Actions here are permanent and require your security key.</p>
+                        <button onclick="resetEverything()" class="btn-danger">Reset All Data</button>
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <div id="folderWindow" class="folder-window-overlay">
+        <div class="folder-window" ondragover="handleDragOver(event)" ondrop="handleDropInWindow(event)">
+            <header class="window-header">
+                <div class="window-nav-btns">
+                    <button class="nav-btn" id="windowBack" onclick="windowHistoryBack()"><i data-lucide="chevron-left"
+                            size="16"></i></button>
+                    <button class="nav-btn" id="windowForward" onclick="windowHistoryForward()"><i
+                            data-lucide="chevron-right" size="16"></i></button>
+                </div>
+                <div class="window-title"><i data-lucide="folder" class="window-icon" size="16"></i><span
+                        id="windowTitleText">Folder</span></div>
+                <button class="window-close-btn" onclick="closeFolderWindow()"><i data-lucide="x"
+                        size="18"></i></button>
+            </header>
+            <div class="window-content">
+                <div class="window-toolbar"
+                    style="display: flex; gap: 10px; padding: 15px; border-bottom: 1px solid var(--border);">
+                    <button class="gold-btn" onclick="openAddLinkInFolder()">+ Add Link</button>
+                    <button class="gold-btn" onclick="openAddFolderInFolder()">+ Add Folder</button>
+                </div>
+
+                <div id="windowFolderGrid" class="inner-grid">
+                </div>
+            </div>
+            <div class="drop-to-root-zone" ondragover="handleDragOver(event)" ondrop="handleDropToRoot(event)"
+                ondragleave="handleDragLeave(event)">
+                <i data-lucide="log-out" size="16"></i> Drag here to move out to Dashboard
+            </div>
         </div>
     </div>
-</div>
 
-<div id="editLinkModal" class="modal-overlay">
-    <div class="modal">
-        <h3>Edit Shortcut</h3>
-        <input type="hidden" id="editLinkId">
-        <input type="text" id="editLinkName" placeholder="Name">
-        <input type="text" id="editLinkUrl" placeholder="URL">
-        <select id="editLinkCatSelect"></select>
-        <div class="modal-btns">
-            <button class="btn-text" onclick="closeModals()">Cancel</button>
-            <button class="btn-primary" onclick="updateLink()">Save Changes</button>
+    <div id="linkModal" class="modal-overlay">
+        <div class="modal">
+            <h3>Add Shortcut</h3>
+
+            <div id="dropZone"
+                style="border: 2px dashed var(--folder-color); padding: 15px; text-align: center; margin-bottom: 15px; border-radius: 8px; font-size: 11px; cursor: copy; opacity: 0.7;">
+                <i data-lucide="mouse-pointer-2" size="16"></i><br>
+                Drop link here to auto-fill
+            </div>
+
+            <input type="text" id="linkName" placeholder="Name">
+            <input type="text" id="linkUrl" placeholder="URL">
+            <select id="linkCatSelect"></select>
+
+            <div class="modal-btns">
+                <button class="btn-text" onclick="closeModals()">Cancel</button>
+                <button class="btn-primary" onclick="saveLink()">Save</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <div id="folderModal" class="modal-overlay">
+        <div class="modal">
+            <h3>Add Category</h3><input type="text" id="folderName" placeholder="Category Name"><select
+                id="folderParentSelect"></select>
+            <div class="modal-btns"><button class="btn-text" onclick="closeModals()">Cancel</button><button
+                    class="btn-primary" onclick="saveFolder()">Create</button></div>
+        </div>
+    </div>
+    <div id="editLinkModal" class="modal-overlay">
+        <div class="modal">
+            <h3>Edit Shortcut</h3><input type="hidden" id="editLinkId"><input type="text" id="editLinkName"
+                placeholder="Name"><input type="text" id="editLinkUrl" placeholder="URL"><select
+                id="editLinkCatSelect"></select>
+            <div class="modal-btns"><button class="btn-text" onclick="closeModals()">Cancel</button><button
+                    class="btn-primary" onclick="updateLink()">Save Changes</button></div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+        <div id="lightning-container"
+            style="position: absolute; width: 100%; height: 100%; pointer-events: none; overflow: hidden;"></div>
+
+        <div class="modal-content-wrapper">
+            <div class="logo-frame-container" id="mainFrame" onclick="event.stopPropagation()">
+                <div class="modal-logo-display" style="background-image: url('file:///W:/Pics/mypic.png');">
+                    <button onclick="closeImageModal()" class="modal-close-btn">&times;</button>
+                </div>
+            </div>
+            <p class="sophisticated-name">M Rizky Wildzany</p>
+        </div>
+    </div>
+
+    <div id="quoteModal" class="quote-modal-overlay">
+        <div class="quote-content">
+            <i data-lucide="quote" style="margin-bottom: 15px; color: var(--accent);"></i>
+            <p id="daily-quote">Loading wisdom...</p>
+        </div>
+    </div>
+
+    <div id="hoverNote">
+        <div id="noteText" class="note-content">No note added yet.</div>
+        <div class="note-actions">
+            <button class="note-btn" onclick="editNote()"><i data-lucide="pencil" size="12"></i> Edit</button>
+            <button class="note-btn" onclick="clearNote()"><i data-lucide="trash-2" size="12"></i> Clear</button>
+        </div>
+    </div>
+
+    <div id="edit-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content-wrapper">
+            <button onclick="closeEditModal()" class="modal-close-btn">&times;</button>
+
+            <div id="edit-menu">
+
+
+
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <img id="edit-icon-preview" src=""
+                        style="width: 64px; height: 64px; border-radius: 12px; border: 2px solid #d4af37; object-fit: cover;">
+                </div>
+
+                <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #d4af37;">Custom Icon:</label>
+                <input type="file" id="icon-file-input" accept="image/*" style="display: none;">
+
+                <button onclick="document.getElementById('icon-file-input').click()" class="gold-btn"
+                    style="width: 100%; margin-bottom: 15px;">
+                    Browse File Explorer
+                </button>
+
+                <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #d4af37;">URL :</label>                
+                <input type="text" id="edit-app-url" placeholder="App URL (e.g., https://google.com)"
+                    style="width: 100%; margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid #d4af37; color: white; border-radius: 5px;">                
+                <label style="display: block; margin-bottom: 8px; font-size: 12px; color: #d4af37;">Name :</label>    
+                <input type="text" id="edit-app-name" placeholder="App Name"
+                    style="width: 100%; margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid #d4af37; color: white; border-radius: 5px;">
+
+                <button onclick="saveAppChanges()" class="save-btn"
+                    style="width: 100%; padding: 10px; background: #d4af37; color: black; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
